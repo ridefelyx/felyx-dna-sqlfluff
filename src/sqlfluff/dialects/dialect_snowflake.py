@@ -351,7 +351,7 @@ class CubeRollupClauseSegment(BaseSegment):
         terminator=OneOf(
             "HAVING",
             "QUALIFY",
-            "ORDER",
+            Sequence("ORDER", "BY"),
             "LIMIT",
             Ref("SetOperatorSegment"),
         ),
@@ -374,7 +374,7 @@ class GroupingSetsClauseSegment(BaseSegment):
         terminator=OneOf(
             "HAVING",
             "QUALIFY",
-            "ORDER",
+            Sequence("ORDER", "BY"),
             "LIMIT",
             Ref("SetOperatorSegment"),
         ),
@@ -735,7 +735,7 @@ class QualifyClauseSegment(BaseSegment):
     match_grammar = StartsWith(
         "QUALIFY",
         terminator=OneOf(
-            "ORDER",
+            Sequence("ORDER", "BY"),
             "LIMIT",
         ),
     )
@@ -1158,12 +1158,12 @@ class ColumnConstraintSegment(BaseSegment):
         Sequence(
             OneOf("AUTOINCREMENT", "IDENTITY"),
             OneOf(
-                Bracketed(Delimited(Ref("NumericLiteralValue"))),
+                Bracketed(Delimited(Ref("NumericLiteralSegment"))),
                 Sequence(
                     "START",
-                    Ref("NumericLiteralValue"),
+                    Ref("NumericLiteralSegment"),
                     "INCREMENT",
-                    Ref("NumericLiteralValue"),
+                    Ref("NumericLiteralSegment"),
                 ),
             ),
         ),
